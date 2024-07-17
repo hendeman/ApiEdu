@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвертация</title>
+</head>
+<body>
+    <h2>Конвертация в БАПБ по карточному курсу</h2>
+    {% if username %}
+        <span> Здравствуй, {{ username }} / </span> <a href="/logout"> Выйти </a><br><br>
+
+        <form action="/protected_resource" method="post">
+            <label for="currency1">Продажа:</label>
+            <select id="currency1" name="rate_sale">
+                {% for currency in currencies %}
+                    {% if (rate_sale and currency == rate_sale) or (not rate_sale and currency == "USD") %}
+                        <option value="{{ currency }}" selected>{{ currency }}</option>
+                    {% else %}
+                        <option value="{{ currency }}">{{ currency }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select><br><br>
+            <label for="currency2">Покупка</label>
+            <select id="currency2" name="rate_buy">
+                {% for currency in currencies %}
+                    {% if (rate_buy and currency == rate_buy) or (not rate_buy and currency == "BYN") %}
+                        <option value="{{ currency }}" selected>{{ currency }}</option>
+                    {% else %}
+                        <option value="{{ currency }}">{{ currency }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select><br><br>
+            <label for="value">Количество</label>
+            <input type="text" id="value" name="value" value="{{ value | default('0') }}" required><br><br>
+            <input type="submit" value="Конвертация">
+        </form>
+        {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+        {% if success_message %}
+            <p style="color: green;">{{ success_message }}</p>
+        {% endif %}
+    {% else %}
+    <span>Данные недоступны, войдите / </span><a href="/login"> Войти </a><br><br>
+    {% endif %}
+</body>
+</html>
